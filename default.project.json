@@ -92,27 +92,7 @@
         }
       },
       "Checkpoint 1": {
-        "$className": "Part",
-        "$properties": {
-          
-          "Anchored": true,
-          "Color": [
-            0.8,
-            0.2,
-            0.2
-          ],
-          "Locked": false,
-          "Position": [
-            0,
-            2,
-            0
-          ],
-          "Size": [
-            10,
-            1,
-            10
-          ]
-        }
+        "$className": "Part"
       }
     },
     "Lighting": {
