@@ -73,6 +73,24 @@
           ]
         }
       },
+      "SpawnLocation": {
+        "$className": "SpawnLocation",
+        "$properties": {
+          "Anchored": true,
+          "Position": [
+            0,
+            0.5,
+            0
+          ],
+          "Size": [
+            6,
+            1,
+            6
+          ],
+          "Transparency": 0.5,
+          "Duration": 0
+        }
+      },
       "Checkpoint 1": {
         "$className": "Part",
         "$properties": {
