@@ -6,6 +6,30 @@
     "ReplicatedStorage": {
       "Shared": {
         "$path": "src/shared"
+      },
+      "Remotes": {
+        "$className": "Folder",
+        "ProgressUpdated": {
+          "$className": "RemoteEvent"
+        },
+        "CoinsUpdated": {
+          "$className": "RemoteEvent"
+        },
+        "CheckpointReached": {
+          "$className": "RemoteEvent"
+        },
+        "ItemPurchased": {
+          "$className": "RemoteEvent"
+        },
+        "DataLoaded": {
+          "$className": "RemoteEvent"
+        },
+        "PurchaseRequest": {
+          "$className": "RemoteEvent"
+        },
+        "UseItem": {
+          "$className": "RemoteEvent"
+        }
       }
     },
 
