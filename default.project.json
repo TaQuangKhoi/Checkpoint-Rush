@@ -171,6 +171,209 @@
           },
           "Tags": ["Checkpoint"]
         }
+      },
+            "Coin1": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Shape": "Ball",
+          "Color": [
+            1,
+            0.8,
+            0
+          ],
+          "Position": [
+            -5,
+            2,
+            10
+          ],
+          "Size": [
+            2,
+            2,
+            2
+          ],
+          "CanCollide": false,
+          "Material": "Neon",
+          "Attributes": {
+            "CoinValue": { "Int32": 10 }
+          },
+          "Tags": ["Coin"]
+        }
+      },
+      "Coin2": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Shape": "Ball",
+          "Color": [
+            1,
+            0.8,
+            0
+          ],
+          "Position": [
+            5,
+            2,
+            10
+          ],
+          "Size": [
+            2,
+            2,
+            2
+          ],
+          "CanCollide": false,
+          "Material": "Neon",
+          "Attributes": {
+            "CoinValue": { "Int32": 10 }
+          },
+          "Tags": ["Coin"]
+        }
+      },
+      "Coin3": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Shape": "Ball",
+          "Color": [
+            1,
+            0.8,
+            0
+          ],
+          "Position": [
+            0,
+            2,
+            30
+          ],
+          "Size": [
+            2,
+            2,
+            2
+          ],
+          "CanCollide": false,
+          "Material": "Neon",
+          "Attributes": {
+            "CoinValue": { "Int32": 10 }
+          },
+          "Tags": ["Coin"]
+        }
+      },
+      "Coin4": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Shape": "Ball",
+          "Color": [
+            1,
+            0.8,
+            0
+          ],
+          "Position": [
+            -5,
+            2,
+            50
+          ],
+          "Size": [
+            2,
+            2,
+            2
+          ],
+          "CanCollide": false,
+          "Material": "Neon",
+          "Attributes": {
+            "CoinValue": { "Int32": 10 }
+          },
+          "Tags": ["Coin"]
+        }
+      },
+      "Coin5": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Shape": "Ball",
+          "Color": [
+            1,
+            0.8,
+            0
+          ],
+          "Position": [
+            5,
+            2,
+            50
+          ],
+          "Size": [
+            2,
+            2,
+            2
+          ],
+          "CanCollide": false,
+          "Material": "Neon",
+          "Attributes": {
+            "CoinValue": { "Int32": 10 }
+          },
+          "Tags": ["Coin"]
+        }
+      },
+      "Obstacle1": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.639216,
+            0.635294,
+            0.647059
+          ],
+          "Position": [
+            0,
+            2,
+            15
+          ],
+          "Size": [
+            4,
+            3,
+            1
+          ]
+        }
+      },
+      "Obstacle2": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.639216,
+            0.635294,
+            0.647059
+          ],
+          "Position": [
+            0,
+            2,
+            35
+          ],
+          "Size": [
+            4,
+            3,
+            1
+          ]
+        }
+      },
+      "Obstacle3": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.639216,
+            0.635294,
+            0.647059
+          ],
+          "Position": [
+            0,
+            2,
+            55
+          ],
+          "Size": [
+            4,
+            3,
+            1
+          ]
+        }
       }
     },
     "Lighting": {
