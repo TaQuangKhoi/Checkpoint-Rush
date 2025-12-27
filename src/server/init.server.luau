@@ -35,6 +35,22 @@ local DataLoaded = Remotes:WaitForChild("DataLoaded")
 local PurchaseRequest = Remotes:WaitForChild("PurchaseRequest")
 local UseItem = Remotes:WaitForChild("UseItem")
 
+-- Sound effects
+local SoundService = game:GetService("SoundService")
+
+local function CreateSound(soundId: string, volume: number): Sound
+	local sound = Instance.new("Sound")
+	sound.SoundId = soundId
+	sound.Volume = volume
+	sound.Parent = SoundService
+	return sound
+end
+
+-- Create sound effects
+local checkpointSound = CreateSound("rbxassetid://5153734434", 0.5)  -- Success sound
+local coinSound = CreateSound("rbxassetid://5153734609", 0.3)  -- Coin collect
+local purchaseSound = CreateSound("rbxassetid://5153734667", 0.4)  -- Purchase sound
+
 print("[Server] Checkpoint Rush server initialized")
 
 -- Track collected coins per player (anti-spam)
@@ -91,7 +107,85 @@ Players.PlayerRemoving:Connect(function(player)
 	EconomyService.CleanupPlayer(player)
 	InventoryService.CleanupPlayer(player)
 	recentlyCollectedCoins[player] = nil
+	StopCoinMagnet(player)
 end)
+
+-- Coin Magnet system
+local magnetLoops: {[Player]: thread} = {}
+
+function StartCoinMagnet(player: Player)
+	-- Stop existing loop if any
+	if magnetLoops[player] then
+		task.cancel(magnetLoops[player])
+	end
+	
+	-- Get magnet radius from item config
+	local item = Items.CoinMagnet
+	local radius = item.Effects.MagnetRadius
+	
+	-- Start collection loop
+	magnetLoops[player] = task.spawn(function()
+		while task.wait(0.5) do  -- Check every 0.5 seconds
+			local character = player.Character
+			if not character then continue end
+			
+			local rootPart = character:FindFirstChild("HumanoidRootPart")
+			if not rootPart then continue end
+			
+			-- Find nearby coins
+			for _, coinPart in ipairs(CollectionService:GetTagged(Stages.CoinTag)) do
+				if not coinPart:IsA("BasePart") then continue end
+				if coinPart.Transparency >= 1 then continue end  -- Skip respawning coins
+				
+				local distance = (coinPart.Position - rootPart.Position).Magnitude
+				if distance <= radius then
+					-- Collect coin (reuse existing logic)
+					local playerCoinTracking = recentlyCollectedCoins[player]
+					if not playerCoinTracking then continue end
+					
+					local lastCollected = playerCoinTracking[coinPart]
+					local now = os.clock()
+					if lastCollected and (now - lastCollected) < COIN_COLLECTION_COOLDOWN then
+						continue  -- Still on cooldown
+					end
+					
+					-- Mark as collected
+					playerCoinTracking[coinPart] = now
+					
+					-- Add coins
+					local coinValue = coinPart:GetAttribute("CoinValue") or 10
+					local newCoins = EconomyService.AddCoins(player, coinValue)
+					
+					-- Play sound
+					coinSound:Play()
+					
+					-- Notify client
+					CoinsUpdated:FireClient(player, newCoins)
+					
+					-- Visual feedback
+					coinPart.Transparency = 1
+					coinPart.CanCollide = false
+					
+					-- Respawn coin
+					task.delay(Stages.CoinRespawnTime, function()
+						coinPart.Transparency = 0
+						coinPart.CanCollide = false
+					end)
+				 end
+			end
+		end
+	end)
+	
+	print("[Server] Coin Magnet started for", player.Name)
+end
+
+function StopCoinMagnet(player: Player)
+	if magnetLoops[player] then
+		task.cancel(magnetLoops[player])
+		magnetLoops[player] = nil
+		print("[Server] Coin Magnet stopped for", player.Name)
+	end
+end
 
 -- Apply passive item effects
 function ApplyPassiveItems(player: Player, character: Model)
@@ -105,6 +199,13 @@ function ApplyPassiveItems(player: Player, character: Model)
 		local item = Items.SpeedBoost
 		humanoid.WalkSpeed = 16 * item.Effects.WalkSpeedMultiplier
 		print("[Server] Applied SpeedBoost to", player.Name)
+	end
+	
+	-- Coin Magnet
+	if table.find(ownedItems, "CoinMagnet") then
+		StartCoinMagnet(player)
+	else
+		StopCoinMagnet(player)
 	end
 end
 
@@ -152,6 +253,9 @@ local function SetupCheckpoint(checkpointPart: BasePart)
 			local offset = Vector3.new(0, 3, 0)
 			ProgressService.SetSpawnPoint(player, checkpointPart.CFrame + offset)
 			
+			-- Play sound
+			checkpointSound:Play()
+			
 			-- Notify client
 			CheckpointReached:FireClient(player, stageIndex)
 			ProgressUpdated:FireClient(player, stageIndex)
@@ -193,6 +297,9 @@ local function SetupCoin(coinPart: BasePart)
 		-- Add coins
 		local newCoins = EconomyService.AddCoins(player, coinValue)
 		
+		-- Play sound
+		coinSound:Play()
+		
 		-- Notify client
 		CoinsUpdated:FireClient(player, newCoins)
 		
@@ -222,6 +329,9 @@ PurchaseRequest.OnServerEvent:Connect(function(player, itemId)
 	
 	-- If successful, update coins
 	if result.Success then
+		-- Play sound
+		purchaseSound:Play()
+		
 		CoinsUpdated:FireClient(player, result.NewCoins)
 		
 		-- Apply item effects immediately if needed

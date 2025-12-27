@@ -39,6 +39,7 @@ local UseItem = Remotes:WaitForChild("UseItem")
 
 function UIController.Init()
 	UIController.CreateUI()
+	UIController.CreateConsumableButtons()
 	UIController.SetupRemoteListeners()
 	print("[UIController] Initialized")
 end
@@ -177,6 +178,79 @@ function UIController.CreateUI()
 	UIController.stageLabel = stageLabel
 end
 
+function UIController.CreateConsumableButtons()
+	-- Create consumable items bar (bottom-right)
+	local consumablesFrame = Instance.new("Frame")
+	consumablesFrame.Name = "ConsumablesFrame"
+	consumablesFrame.Size = UDim2.new(0, 200, 0, 70)
+	consumablesFrame.Position = UDim2.new(1, -210, 1, -80)
+	consumablesFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	consumablesFrame.BorderSizePixel = 2
+	consumablesFrame.BorderColor3 = Color3.fromRGB(150, 150, 150)
+	consumablesFrame.Parent = screenGui
+	
+	local consumablesLayout = Instance.new("UIListLayout")
+	consumablesLayout.Padding = UDim.new(0, 5)
+	consumablesLayout.FillDirection = Enum.FillDirection.Horizontal
+	consumablesLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	consumablesLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+	consumablesLayout.Parent = consumablesFrame
+	
+	local consumablesPadding = Instance.new("UIPadding")
+	consumablesPadding.PaddingLeft = UDim.new(0, 10)
+	consumablesPadding.PaddingRight = UDim.new(0, 10)
+	consumablesPadding.PaddingTop = UDim.new(0, 10)
+	consumablesPadding.PaddingBottom = UDim.new(0, 10)
+	consumablesPadding.Parent = consumablesFrame
+	
+	-- Store reference
+	UIController.consumablesFrame = consumablesFrame
+end
+
+function UIController.RefreshConsumables()
+	if not UIController.consumablesFrame then return end
+	
+	-- Clear existing buttons
+	for _, child in ipairs(UIController.consumablesFrame:GetChildren()) do
+		if child:IsA("TextButton") then
+			child:Destroy()
+		end
+	end
+	
+	-- Add button for CheckpointWarp if owned
+	if table.find(ownedItems, "CheckpointWarp") then
+		local warpButton = Instance.new("TextButton")
+		warpButton.Name = "CheckpointWarpButton"
+		warpButton.Size = UDim2.new(0, 180, 0, 50)
+		warpButton.BackgroundColor3 = Color3.fromRGB(100, 150, 255)
+		warpButton.BorderSizePixel = 0
+		warpButton.Text = "🚀 Warp to Checkpoint"
+		warpButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		warpButton.TextSize = 16
+		warpButton.Font = Enum.Font.GothamBold
+		warpButton.Parent = UIController.consumablesFrame
+		
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 6)
+		corner.Parent = warpButton
+		
+		warpButton.MouseButton1Click:Connect(function()
+			-- Send use item request to server
+			UseItem:FireServer("CheckpointWarp")
+			warpButton.Text = "Using..."
+			warpButton.Active = false
+			
+			-- Remove button after use (will be recreated if another is purchased)
+			task.delay(0.5, function()
+				warpButton:Destroy()
+			end)
+		end)
+	end
+	
+	-- Hide frame if no consumables
+	UIController.consumablesFrame.Visible = #UIController.consumablesFrame:GetChildren() > 2  -- >2 because layout+padding
+end
+
 function UIController.RefreshShop()
 	-- Clear existing items
 	for _, child in ipairs(itemsList:GetChildren()) do
@@ -267,6 +341,13 @@ function UIController.SetupRemoteListeners()
 		currentStage = stage
 		UIController.UpdateCoinDisplay()
 		UIController.UpdateStageDisplay()
+		UIController.RefreshConsumables()
+		
+		-- Enable double jump if owned
+		if table.find(items, "DoubleJump") then
+			local InputController = require(script.Parent.InputController)
+			InputController.EnableDoubleJump()
+		end
 	end)
 	
 	-- Coins updated
@@ -302,7 +383,14 @@ function UIController.SetupRemoteListeners()
 			currentCoins = result.NewCoins
 			ownedItems = result.OwnedItems
 			UIController.UpdateCoinDisplay()
+			UIController.RefreshConsumables()
 			UIController.ShowNotification(result.Message, Color3.fromRGB(100, 255, 100))
+			
+			-- Enable double jump if it was just purchased
+			if table.find(result.OwnedItems, "DoubleJump") then
+				local InputController = require(script.Parent.InputController)
+				InputController.EnableDoubleJump()
+			end
 		else
 			UIController.ShowNotification(result.Message, Color3.fromRGB(255, 100, 100))
 		end
