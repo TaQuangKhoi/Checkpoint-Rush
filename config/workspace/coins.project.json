@@ -1,7 +1,35 @@
 {
-  "name": "Folder",
+  "name": "Coins",
   "tree": {
     "$className": "Folder",
+    "CoinMoi": {
+    "$className": "Part",
+    "$properties": {
+      "Anchored": true,
+      "Shape": "Ball",
+      "Color": [
+        1,
+        0.8,
+        0
+      ],
+      "Position": [
+        -5,
+        2,
+        10
+      ],
+      "Size": [
+        2,
+        2,
+        2
+      ],
+      "CanCollide": false,
+      "Material": "Neon",
+      "Attributes": {
+        "CoinValue": { "Int32": 10 }
+      },
+      "Tags": ["Coin"]
+    }
+  },
 "Coin1": {
     "$className": "Part",
     "$properties": {
@@ -423,5 +451,5 @@
     }
   }
   }
-  
+
 }
