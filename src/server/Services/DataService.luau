@@ -17,7 +17,22 @@ local ProgressService
 local EconomyService
 local InventoryService
 
-local playerDataStore = DataStoreService:GetDataStore("PlayerData_v1")
+-- Try to get DataStore (may fail in Studio without API enabled)
+local playerDataStore
+local USE_MOCK_DATA = false
+local success, result = pcall(function()
+	return DataStoreService:GetDataStore("PlayerData_v1")
+end)
+
+if success then
+	playerDataStore = result
+	print("[DataService] DataStore enabled")
+else
+	warn("[DataService] DataStore not available (running in mock mode):", result)
+	USE_MOCK_DATA = true
+end
+
+local mockData: {[number]: PlayerData} = {}  -- Mock storage for testing
 local AUTO_SAVE_INTERVAL = 120  -- Auto-save every 2 minutes
 
 function DataService.Init(progressService, economyService, inventoryService)
@@ -41,6 +56,22 @@ function DataService.GetKey(player: Player): string
 end
 
 function DataService.LoadProfile(player: Player): PlayerData?
+	-- Use mock data if DataStore is not available
+	if USE_MOCK_DATA then
+		local data = mockData[player.UserId]
+		if data then
+			print("[DataService] [MOCK] Loaded data for", player.Name)
+			return data
+		else
+			print("[DataService] [MOCK] No saved data for", player.Name, "- using defaults")
+			return {
+				StageIndex = 1,
+				Coins = 0,
+				OwnedItems = {}
+			}
+		end
+	end
+	
 	local key = DataService.GetKey(player)
 	local success, data = pcall(function()
 		return playerDataStore:GetAsync(key)
@@ -71,6 +102,13 @@ function DataService.SaveProfile(player: Player): boolean
 		Coins = EconomyService.GetCoins(player),
 		OwnedItems = InventoryService.GetItems(player)
 	}
+	
+	-- Use mock data if DataStore is not available
+	if USE_MOCK_DATA then
+		mockData[player.UserId] = data
+		print("[DataService] [MOCK] Saved data for", player.Name, "- Stage:", data.StageIndex, "Coins:", data.Coins, "Items:", #data.OwnedItems)
+		return true
+	end
 	
 	local key = DataService.GetKey(player)
 	local success, err = pcall(function()

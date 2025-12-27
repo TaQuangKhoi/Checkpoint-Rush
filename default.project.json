@@ -51,125 +51,131 @@
       "$properties": {
         "FilteringEnabled": true
       },
-      "Baseplate": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.38823,
-            0.37254,
-            0.38823
-          ],
-          "Locked": true,
-          "Position": [
-            0,
-            -10,
-            0
-          ],
-          "Size": [
-            512,
-            20,
-            512
-          ]
+      "Environment": {
+        "$className": "Folder",
+        "Baseplate": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.38823,
+              0.37254,
+              0.38823
+            ],
+            "Locked": true,
+            "Position": [
+              0,
+              -10,
+              0
+            ],
+            "Size": [
+              512,
+              20,
+              512
+            ]
+          }
+        },
+        "SpawnLocation": {
+          "$className": "SpawnLocation",
+          "$properties": {
+            "Anchored": true,
+            "Position": [
+              0,
+              0.5,
+              0
+            ],
+            "Size": [
+              6,
+              1,
+              6
+            ],
+            "Transparency": 0.5,
+            "Duration": 0
+          }
         }
       },
-      "SpawnLocation": {
-        "$className": "SpawnLocation",
-        "$properties": {
-          "Anchored": true,
-          "Position": [
-            0,
-            0.5,
-            0
-          ],
-          "Size": [
-            6,
-            1,
-            6
-          ],
-          "Transparency": 0.5,
-          "Duration": 0
-        }
-      },
-      "Checkpoint 1": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.8,
-            0.2,
-            0.2
-          ],
-          "Position": [
-            0,
-            0.5,
-            20
-          ],
-          "Size": [
-            8,
-            1,
-            8
-          ],
-          "Transparency": 0.3,
-          "CanCollide": false,
-          "Attributes": {
-            "StageIndex": { "Int32": 2 }
-          },
-          "Tags": ["Checkpoint"]
-        }
-      },
-      "Checkpoint2": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.8,
-            0.2,
-            0.2
-          ],
-          "Position": [
-            0,
-            0.5,
-            40
-          ],
-          "Size": [
-            8,
-            1,
-            8
-          ],
-          "Transparency": 0.3,
-          "CanCollide": false,
-          "Attributes": {
-            "StageIndex": { "Int32": 3 }
-          },
-          "Tags": ["Checkpoint"]
-        }
-      },
-      "Checkpoint3": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.8,
-            0.2,
-            0.2
-          ],
-          "Position": [
-            0,
-            0.5,
-            60
-          ],
-          "Size": [
-            8,
-            1,
-            8
-          ],
-          "Transparency": 0.3,
-          "CanCollide": false,
-          "Attributes": {
-            "StageIndex": { "Int32": 4 }
-          },
-          "Tags": ["Checkpoint"]
+      "Checkpoints": {
+        "$className": "Folder",
+        "Checkpoint1": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.8,
+              0.2,
+              0.2
+            ],
+            "Position": [
+              0,
+              0.5,
+              20
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Transparency": 0.3,
+            "CanCollide": false,
+            "Attributes": {
+              "StageIndex": { "Int32": 2 }
+            },
+            "Tags": ["Checkpoint"]
+          }
+        },
+        "Checkpoint2": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.8,
+              0.2,
+              0.2
+            ],
+            "Position": [
+              0,
+              0.5,
+              40
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Transparency": 0.3,
+            "CanCollide": false,
+            "Attributes": {
+              "StageIndex": { "Int32": 3 }
+            },
+            "Tags": ["Checkpoint"]
+          }
+        },
+        "Checkpoint3": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.8,
+              0.2,
+              0.2
+            ],
+            "Position": [
+              0,
+              0.5,
+              60
+            ],
+            "Size": [
+              8,
+              1,
+              8
+            ],
+            "Transparency": 0.3,
+            "CanCollide": false,
+            "Attributes": {
+              "StageIndex": { "Int32": 4 }
+            },
+            "Tags": ["Checkpoint"]
+          }
         }
       },
       "Coins": {
@@ -315,67 +321,70 @@
           }
         }
       },
-      "Obstacle1": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.639216,
-            0.635294,
-            0.647059
-          ],
-          "Position": [
-            0,
-            2,
-            15
-          ],
-          "Size": [
-            4,
-            3,
-            1
-          ]
-        }
-      },
-      "Obstacle2": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.639216,
-            0.635294,
-            0.647059
-          ],
-          "Position": [
-            0,
-            2,
-            35
-          ],
-          "Size": [
-            4,
-            3,
-            1
-          ]
-        }
-      },
-      "Obstacle3": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Color": [
-            0.639216,
-            0.635294,
-            0.647059
-          ],
-          "Position": [
-            0,
-            2,
-            55
-          ],
-          "Size": [
-            4,
-            3,
-            1
-          ]
+      "Obstacles": {
+        "$className": "Folder",
+        "Obstacle1": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.639216,
+              0.635294,
+              0.647059
+            ],
+            "Position": [
+              0,
+              2,
+              15
+            ],
+            "Size": [
+              4,
+              3,
+              1
+            ]
+          }
+        },
+        "Obstacle2": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.639216,
+              0.635294,
+              0.647059
+            ],
+            "Position": [
+              0,
+              2,
+              35
+            ],
+            "Size": [
+              4,
+              3,
+              1
+            ]
+          }
+        },
+        "Obstacle3": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Color": [
+              0.639216,
+              0.635294,
+              0.647059
+            ],
+            "Position": [
+              0,
+              2,
+              55
+            ],
+            "Size": [
+              4,
+              3,
+              1
+            ]
+          }
         }
       }
     },
